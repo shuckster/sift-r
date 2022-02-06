@@ -1,6 +1,5 @@
 <h1 align="center"><code>sift-r</code> 📥</h1>
 
-<!--
 <p align="center">
   <a href="https://github.com/shuckster/sift-r/blob/master/LICENSE">
     <img
@@ -18,7 +17,6 @@
       src="https://img.shields.io/npm/v/sift-r?style=plastic"
     /></a>
 </p>
--->
 
 Apportion objects / arrays into multiple buckets based on a predicate / pattern.
 
