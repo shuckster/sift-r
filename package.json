@@ -1,7 +1,7 @@
 {
   "name": "sift-r",
   "browserGlobalName": "siftr",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Apportion objects / arrays into multiple buckets based on predicates / patterns",
   "author": "Conan Theobald",
   "license": "MIT",
