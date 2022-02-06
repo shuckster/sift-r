@@ -1,6 +1,6 @@
 /*
  * sift-r
- * v1.0.0
+ * v1.0.1
  * https://github.com/shuckster/sift-r
  * License: MIT
  */
