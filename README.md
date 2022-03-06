@@ -56,7 +56,7 @@ const [strValues, numValues, neither] = sift(
 ## Install / Use
 
 ```
-npm i sift-r
+$ pnpm i sift-r
 ```
 
 Supports `import`/`require` for ESM/CJS.
