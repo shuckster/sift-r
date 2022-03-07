@@ -5,10 +5,7 @@ const { not } = lib
 const { isArray, isPojo, isFunction, isString } = lib
 
 const isArrayOfBinaryArrays = val =>
-  isArray(val) &&
-  val.every(isArray) &&
-  val.every(x => x.length === 2) &&
-  val.every(x => isFunction(x[0]))
+  isArray(val) && val.every(isArray) && val.every(x => x.length === 2)
 
 const isPojoOfBinaryArrays = val =>
   isPojo(val) && isArrayOfBinaryArrays(Object.values(val))

@@ -16,12 +16,14 @@ const testCases = [
             title: [isString, 'header'],
             slug: [isString, 1],
             markdown: [isString, '# header'],
-            footer: [isString, undefined]
+            footer: [isString, undefined],
+            tags: [/^t/, 'tag']
           },
           expecting: [
             {
               title: 'header',
-              markdown: '# header'
+              markdown: '# header',
+              tags: 'tag'
             },
             {
               slug: 1,
@@ -45,19 +47,22 @@ const testCases = [
               title: 'header',
               slug: 1,
               markdown: '# header',
-              footer: undefined
+              footer: undefined,
+              tags: 'tag'
             },
             {
               title: isString,
               slug: isString,
               markdown: isString,
-              footer: isString
+              footer: isString,
+              tags: /^t/
             }
           ],
           expecting: [
             {
               title: 'header',
-              markdown: '# header'
+              markdown: '# header',
+              tags: 'tag'
             },
             {
               slug: 1,
