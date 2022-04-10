@@ -53,6 +53,36 @@ const [strValues, numValues, neither] = sift(
 //   }
 ```
 
+### Depends on, and is a complement to [match-iz](https://github.com/shuckster/match-iz):
+
+```js
+import { sift } from 'sift-r'
+import { gte, allOf } from 'match-iz'
+
+const users = [
+  { user: 'barney', age: 36, active: false },
+  { user: 'fred', age: 40, active: true },
+  { user: 'pebbles', age: 1, active: true }
+]
+
+const isActive = { active: true }
+const isGrownUp = { age: gte(18) }
+const isActiveGrownUp = allOf(isActive, isGrownUp)
+
+const [activeGrownUps, everyoneElse] = sift(users, isActiveGrownUp)
+
+// activeGrownUps ===
+//   [
+//     { user: 'fred', age: 40, active: true }
+//   ]
+
+// everyoneElse ===
+//   [
+//     { user: 'barney', age: 36, active: false },
+//     { user: 'pebbles', age: 1, active: true }
+//   ]
+```
+
 ## Install / Use
 
 ```
