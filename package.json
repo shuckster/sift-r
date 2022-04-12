@@ -16,10 +16,12 @@
   "main": "./dist/cjs/sift-r.cjs.js",
   "module": "dist/esm/sift-r.esm.js",
   "exports": {
-    "import": "./dist/esm/sift-r.esm.js",
-    "require": "./dist/cjs/sift-r.cjs.js",
-    "browser": "./dist/browser/sift-r.browser.js",
-    "default": "./dist/cjs/sift-r.cjs.js"
+    ".": {
+      "import": "./dist/esm/sift-r.esm.js",
+      "require": "./dist/cjs/sift-r.cjs.js",
+      "browser": "./dist/browser/sift-r.browser.js",
+      "default": "./dist/cjs/sift-r.cjs.js"
+    }
   },
   "files": [
     "dist/**/*.js",
