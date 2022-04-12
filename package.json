@@ -21,7 +21,8 @@
       "require": "./dist/cjs/sift-r.cjs.js",
       "browser": "./dist/browser/sift-r.browser.js",
       "default": "./dist/cjs/sift-r.cjs.js"
-    }
+    },
+    "./package.json": "./package.json"
   },
   "files": [
     "dist/**/*.js",
