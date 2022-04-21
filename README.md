@@ -117,6 +117,7 @@ sift(input, optionalSchemaOrPattern)
 5: sift([[pattern, value], [pattern, value], ...])
 6: sift([value, value], [pattern, pattern])
 7: sift([value, value], value-pattern)
+8: sift([value, value], ...value-patterns)
 ```
 
 `pattern` means either a `predicate` function, or something that the [match-iz](https://github.com/shuckster/match-iz#documentation) `when()` method supports, because `sift` uses `match-iz` internally.
@@ -167,7 +168,7 @@ const [strValues, failed] = sift(
 )
 ```
 
-Call-signatures #5-7 (arrays):
+Call-signatures #5-8 (arrays):
 
 ```js
 // 5:
@@ -190,6 +191,14 @@ const [strValues, failed] = sift(
 const [strValues, failed] = sift(
   ['header', 1, '# header'],
   isString
+)
+
+// 8:
+//
+const [strValues, failed] = sift(
+  ['header', 1, '# header', 2, false, true],
+  isString,
+  isNumber
 )
 ```
 

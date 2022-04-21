@@ -1,5 +1,5 @@
 import { strict } from 'assert'
-import { isPojo, isArray, isString, isNumber } from 'match-iz'
+import { isPojo, isArray, isString, isNumber, lt } from 'match-iz'
 
 import { sift } from '../src/sift-r.mjs'
 
@@ -261,6 +261,32 @@ const testCases = [
               { user: 'barney', age: 36, active: false },
               { user: 'pebbles', age: 1, active: false }
             ]
+          ]
+        }
+      ],
+      run: (assertCase, input) => {
+        assertCase(sift(...input))
+      }
+    }
+  ],
+  [
+    'siftArrayAgainstPatterns',
+    {
+      cases: [
+        {
+          input: [
+            [
+              { user: 'barney', age: 36, active: false },
+              { user: 'fred', age: 40, active: true },
+              { user: 'pebbles', age: 1, active: false }
+            ],
+            { age: 1, active: false },
+            { age: lt(40) }
+          ],
+          expecting: [
+            [{ user: 'pebbles', age: 1, active: false }],
+            [{ user: 'barney', age: 36, active: false }],
+            [{ user: 'fred', age: 40, active: true }]
           ]
         }
       ],

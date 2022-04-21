@@ -1,7 +1,7 @@
 import * as lib from 'match-iz'
 
 const { match, against, when, otherwise } = lib
-const { not } = lib
+const { not, allOf, firstOf, gte } = lib
 const { isArray, isPojo, isFunction, isString } = lib
 
 const isArrayOfBinaryArrays = val =>
@@ -10,8 +10,8 @@ const isArrayOfBinaryArrays = val =>
 const isPojoOfBinaryArrays = val =>
   isPojo(val) && isArrayOfBinaryArrays(Object.values(val))
 
-export function sift(input, optionalSchema) {
-  return match(optionalSchema ? [input, optionalSchema] : [input])(
+export function sift(input, ...optionalSchema) {
+  return match([input, ...optionalSchema])(
     // Pojo
     when([isPojoOfBinaryArrays])(siftPojoOfBinaryArrays),
     when([isPojo, isPojo])(siftPojoAgainstSchema),
@@ -22,6 +22,7 @@ export function sift(input, optionalSchema) {
     when([isArrayOfBinaryArrays])(siftArrayOfBinaryArrays),
     when([isArray, isArray])(siftArrayAgainstSchema),
     when([isArray, not(isArray)])(siftArrayAgainstPattern),
+    when(allOf(firstOf(isArray), { length: gte(2) }))(siftArrayAgainstPatterns),
 
     // Passthru
     when([isPojo])(([input]) => [{}, input]),
@@ -61,6 +62,22 @@ const siftArrayAgainstPattern = ([arr, predicate]) =>
     Array.from({ length: arr.length }).fill(predicate)
   ])
 
+const siftArrayAgainstPatterns = ([arr, ...patterns]) => {
+  const results = Array.from({ length: patterns.length }).map(() => [])
+  const noMatch = []
+  arr.forEach(
+    against(
+      ...patterns.map((pattern, idx) => when(pattern)(assignTo(results[idx]))),
+      otherwise(assignTo(noMatch))
+    )
+  )
+  return [...results, noMatch]
+
+  function assignTo(arr) {
+    return item => arr.push(item)
+  }
+}
+
 //
 // Pojo
 //
@@ -94,14 +111,14 @@ const siftPojoAgainstPredicate = ([pojo, predicate]) =>
 
 const siftPojoAgainstPatterns = ([pojo, arr]) => {
   const results = Array.from({ length: arr.length }).map(() => ({}))
-  const none = {}
+  const noMatch = {}
   Object.entries(pojo).forEach(
     against(
       ...arr.map((T, idx) => when([isString, T])(assignTo(results[idx]))),
-      otherwise(assignTo(none))
+      otherwise(assignTo(noMatch))
     )
   )
-  return [...results, none]
+  return [...results, noMatch]
 
   function assignTo(obj) {
     return ([K, V]) => Object.assign(obj, { [K]: V })

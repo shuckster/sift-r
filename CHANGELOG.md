@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [1.2.0] - 2022-04-21
+
+### Added
+
+- Allow multiple patterns to be specified when sifting an array:
+
+```js
+import { lt } from 'match-iz'
+
+const [oneYearOlds, lessThan40, theRest] = sift(
+  [
+    { user: 'barney', age: 36, active: false },
+    { user: 'fred', age: 40, active: true },
+    { user: 'pebbles', age: 1, active: false }
+  ],
+  { age: 1, active: false },
+  { age: lt(40) }
+)
+```
+
 ## [1.1.4] - 2022-04-15
 
 ### Removed / Fixed
