@@ -131,7 +131,7 @@ Here are call-signatures #1-3 (pojos):
 ```js
 // 1:
 //
-const [strValues, failed] = sift({
+const [strValues, theRest] = sift({
   title: [isString, 'header'],
   slug: [isString, 1],
   markdown: [isString, '# header'],
@@ -140,7 +140,7 @@ const [strValues, failed] = sift({
 
 // 2:
 //
-const [strValues, failed] = sift(
+const [strValues, theRest] = sift(
   {
     title: 'header',
     slug: 1,
@@ -157,7 +157,7 @@ const [strValues, failed] = sift(
 
 // 3:
 //
-const [strValues, failed] = sift(
+const [strValues, theRest] = sift(
   {
     title: 'header',
     slug: 1,
@@ -173,7 +173,7 @@ Call-signatures #5-8 (arrays):
 ```js
 // 5:
 //
-const [strValues, failed] = sift([
+const [strValues, theRest] = sift([
   [isString, 'header'],
   [isString, 1],
   [isString, '# header']
@@ -181,21 +181,21 @@ const [strValues, failed] = sift([
 
 // 6:
 //
-const [strValues, failed] = sift(
+const [strValues, theRest] = sift(
   ['header', 1, '# header'],
   [isString, isString, isString]
 )
 
 // 7:
 //
-const [strValues, failed] = sift(
+const [strValues, theRest] = sift(
   ['header', 1, '# header'],
   isString
 )
 
 // 8:
 //
-const [strValues, failed] = sift(
+const [strValues, numValues, theRest] = sift(
   ['header', 1, '# header', 2, false, true],
   isString,
   isNumber
