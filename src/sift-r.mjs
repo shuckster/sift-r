@@ -1,14 +1,18 @@
 import * as lib from 'match-iz'
 
 const { match, against, when, otherwise } = lib
-const { not, allOf, firstOf, gte } = lib
+const { not, allOf, firstOf, every, gte } = lib
 const { isArray, isPojo, isFunction, isString } = lib
 
-const isArrayOfBinaryArrays = val =>
-  isArray(val) && val.every(isArray) && val.every(x => x.length === 2)
+const isArrayOfBinaryArrays = allOf(
+  isArray,
+  every(isArray),
+  every({ length: 2 })
+)
 
-const isPojoOfBinaryArrays = val =>
-  isPojo(val) && isArrayOfBinaryArrays(Object.values(val))
+const isPojoOfBinaryArrays = allOf(isPojo, val =>
+  isArrayOfBinaryArrays(Object.values(val))
+)
 
 export function sift(input, ...optionalSchema) {
   return match([input, ...optionalSchema])(
