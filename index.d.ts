@@ -13,6 +13,7 @@ declare module 'sift-r' {
    * 5: sift([[pattern, value], [pattern, value], ...])
    * 6: sift([value, value], [pattern, pattern])
    * 7: sift([value, value], value-pattern)
+   * 8: sift([value, value], ...value-patterns)
    */
   export function sift(input: any, optionalSchemaOrPattern: any): Array<any>
 }
