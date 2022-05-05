@@ -43,7 +43,7 @@ const siftArrayAgainstSchema = ([arr, schema]) =>
   arr.reduce(
     ([left, right], V, K) =>
       match(V)(
-        when(schema[K])(() => [[...left, V], right]),
+        when(schema[K])(V => [[...left, V], right]),
         otherwise(() => [left, [...right, V]])
       ),
     [[], []]
@@ -60,10 +60,10 @@ const siftArrayOfBinaryArrays = ([arrayOfBinaryArrays]) =>
     )
   )
 
-const siftArrayAgainstPattern = ([arr, predicate]) =>
+const siftArrayAgainstPattern = ([arr, pattern]) =>
   siftArrayAgainstSchema([
     arr,
-    Array.from({ length: arr.length }).fill(predicate)
+    Array.from({ length: arr.length }).fill(pattern)
   ])
 
 const siftArrayAgainstPatterns = ([arr, ...patterns]) => {

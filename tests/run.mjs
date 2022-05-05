@@ -1,5 +1,5 @@
 import { strict } from 'assert'
-import { isPojo, isArray, isString, isNumber, lt } from 'match-iz'
+import { pluck, isPojo, isArray, isString, isNumber, lt } from 'match-iz'
 
 import { sift } from '../src/sift-r.mjs'
 
@@ -262,6 +262,38 @@ const testCases = [
               { user: 'pebbles', age: 1, active: false }
             ]
           ]
+        },
+        {
+          input: [
+            [
+              { user: 'barney', age: 36, active: false },
+              { user: 'fred', age: 40, active: true },
+              { user: 'pebbles', age: 1, active: false }
+            ],
+            { active: false, age: pluck(isNumber) }
+          ],
+          expecting: [
+            [36, 1],
+            [
+              {
+                user: 'fred',
+                age: 40,
+                active: true
+              }
+            ]
+          ]
+        },
+        {
+          input: [
+            [
+              { user: 'barney', age: 36, active: false },
+              { user: 'fred', age: 40, active: true },
+              { user: 'pebbles', age: 1, active: false }
+            ],
+            { active: false, age: pluck(isNumber) },
+            { active: true, age: pluck(isNumber) }
+          ],
+          expecting: [[36, 1], [40], []]
         }
       ],
       run: (assertCase, input) => {

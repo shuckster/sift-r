@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [1.2.2] - 2022-05-05
+
+### Fixed
+
+- `match-iz` `pluck()` method was not working when sifting an array against a single pattern
+
 ## [1.2.1] - 2022-04-22
 
 ### Fixed
