@@ -9,7 +9,7 @@ specifiers:
   typescript: ^4.6.4
 
 dependencies:
-  match-iz: 3.5.3
+  match-iz: 3.5.4
 
 devDependencies:
   compose-paths: 1.2.2
@@ -626,8 +626,8 @@ packages:
     resolution: {integrity: sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==}
     dev: true
 
-  /match-iz/3.5.3:
-    resolution: {integrity: sha512-zp9pg8pLH/zTsATr+5yZX/1X1ocIFX0iQJx3MhbLYXXskyHBAcXbJCNo/zpVgOt/heZ/qY3DhnE5iTC2LOg4fA==}
+  /match-iz/3.5.4:
+    resolution: {integrity: sha512-5/y2rcNjsHHY5g3gr0vMPRMfv11tGrMbBUfv/T8gMuYOq+W3cVfntVE7Xv3dqdjM4QGsQPiIdOTDylaHoUum3Q==}
     engines: {node: '>=10'}
     dev: false
 
