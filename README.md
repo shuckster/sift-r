@@ -20,6 +20,11 @@
 
 A complement to [match-iz](https://github.com/shuckster/match-iz) for filtering objects and arrays based on a `match-iz` pattern.
 
+- 🗺 [byPattern() for map/filter](#bypattern)
+- 📥 [sift() an object](#sift-an-object)
+- 📁 [sift() an array](#sift-an-array)
+- 📖 [Documentation](https://github.com/shuckster/sift-r/wiki)
+
 ### `byPattern()`
 
 ```js
@@ -48,7 +53,7 @@ const mapped = [
 // mapped === [36, 40, 1, undefined]
 ```
 
-### `sift()`
+### `sift()` an object
 
 ```js
 import { sift } from 'sift-r'
@@ -83,7 +88,9 @@ const [strValues, numValues, neither] = sift(
 //   }
 ```
 
-### Using [match-iz](https://github.com/shuckster/match-iz) pattern-helpers:
+### `sift()` an array
+
+(+using [match-iz](https://github.com/shuckster/match-iz) pattern-helpers)
 
 ```js
 import { sift } from 'sift-r'
