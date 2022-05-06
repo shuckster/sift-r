@@ -1,7 +1,7 @@
 import { strict } from 'assert'
 import { pluck, isPojo, isArray, isString, isNumber, lt } from 'match-iz'
 
-import { sift } from '../src/sift-r.mjs'
+import { sift, byPattern } from '../src/sift-r.mjs'
 
 const testCases = [
   //
@@ -381,6 +381,63 @@ const testCases = [
       ],
       run: (assertCase, input) => {
         assertCase(sift(input))
+      }
+    }
+  ],
+  //
+  // byPattern
+  //
+  [
+    '.filter(byPattern)',
+    {
+      cases: [
+        {
+          input: [
+            { user: 'barney', age: 36, active: false },
+            { user: 'fred', age: 40, active: true },
+            { user: 'pebbles', age: 1, active: false }
+          ],
+          expecting: [{ user: 'barney', age: 36, active: false }]
+        }
+      ],
+      run: (assertCase, input) => {
+        assertCase(input.filter(byPattern({ age: 36 })))
+      }
+    }
+  ],
+  [
+    '.map(byPattern)',
+    {
+      cases: [
+        {
+          input: {
+            array: [
+              { user: 'barney', age: 36, active: false },
+              { user: 'fred', age: 40, active: true },
+              { user: 'pebbles', age: 1, active: false }
+            ],
+            pattern: { age: 40 }
+          },
+          expecting: [
+            undefined,
+            { user: 'fred', age: 40, active: true },
+            undefined
+          ]
+        },
+        {
+          input: {
+            array: [
+              { user: 'barney', age: 36, active: false },
+              { user: 'fred', age: 40, active: true },
+              { user: 'pebbles', age: 1, active: false }
+            ],
+            pattern: { age: pluck(isNumber) }
+          },
+          expecting: [36, 40, 1]
+        }
+      ],
+      run: (assertCase, { array, pattern }) => {
+        assertCase(array.map(byPattern(pattern)))
       }
     }
   ]

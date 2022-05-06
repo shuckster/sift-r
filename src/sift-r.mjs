@@ -35,6 +35,12 @@ export function sift(input, ...optionalSchema) {
   )
 }
 
+export const byPattern = pattern =>
+  against(
+    when(pattern, x => x),
+    otherwise(undefined)
+  )
+
 //
 // Arrays
 //

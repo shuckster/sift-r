@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [1.3.0] - 2022-05-06
+
+### Added
+
+- `byPattern`, useful for applying a `match-iz` pattern to `Array#map` and `Array#filter`
+
 ## [1.2.2] - 2022-05-05
 
 ### Fixed

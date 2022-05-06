@@ -18,7 +18,37 @@
     /></a>
 </p>
 
-Apportion objects / arrays into multiple buckets based on a predicate / pattern.
+A complement to [match-iz](https://github.com/shuckster/match-iz) for filtering objects and arrays based on a `match-iz` pattern.
+
+### `byPattern()`
+
+```js
+import { byPattern } from 'sift-r'
+
+const filtered = [
+  { user: 'barney', age: 36, active: false },
+  { user: 'fred', age: 40, active: true },
+  { user: 'pebbles', age: 1, active: false }
+].filter(byPattern({ age: 36 }))
+
+// filtered ===
+//   [
+//     { user: 'barney', age: 36, active: false }
+//   ]
+
+import { pluck, isNumber } from 'match-iz'
+
+const mapped = [
+  { user: 'barney', age: 36, active: false },
+  { user: 'fred', age: 40, active: true },
+  { user: 'pebbles', age: 1, active: false },
+  { user: '', age: 'not-a-number', active: true }
+].map(byPattern({ age: pluck(isNumber) }))
+
+// mapped === [36, 40, 1, undefined]
+```
+
+### `sift()`
 
 ```js
 import { sift } from 'sift-r'
@@ -53,7 +83,7 @@ const [strValues, numValues, neither] = sift(
 //   }
 ```
 
-### Depends on, and is a complement to [match-iz](https://github.com/shuckster/match-iz):
+### Using [match-iz](https://github.com/shuckster/match-iz) pattern-helpers:
 
 ```js
 import { sift } from 'sift-r'
@@ -96,7 +126,7 @@ Browser/UMD version here:
 ```html
 <script src="https://unpkg.com/sift-r/dist/browser/sift-r.browser.js"></script>
 <script>
-  const { sift } = siftr
+  const { sift, byPattern } = siftr
 </script>
 ```
 
