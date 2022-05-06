@@ -24,6 +24,7 @@ A complement to [match-iz](https://github.com/shuckster/match-iz) for filtering 
 - 📥 [sift() an object](#sift-an-object)
 - 📁 [sift() an array](#sift-an-array)
 - 📖 [Documentation](https://github.com/shuckster/sift-r/wiki)
+- 📀 [Install / Use](#install--use)
 
 ### `byPattern()`
 
