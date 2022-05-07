@@ -124,6 +124,7 @@ const [activeGrownUps, everyoneElse] = sift(users, isActiveGrownUp)
 ### `sift()` an array into multiple buckets
 
 ```js
+import { sift } from 'sift-r'
 import { lt } from 'match-iz'
 
 const [oneYearOlds, lessThan40, theRest] = sift(
