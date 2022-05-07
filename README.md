@@ -121,6 +121,22 @@ const [activeGrownUps, everyoneElse] = sift(users, isActiveGrownUp)
 //   ]
 ```
 
+### `sift()` an array into multiple buckets
+
+```js
+import { lt } from 'match-iz'
+
+const [oneYearOlds, lessThan40, theRest] = sift(
+  [
+    { user: 'barney', age: 36, active: false },
+    { user: 'fred', age: 40, active: true },
+    { user: 'pebbles', age: 1, active: false }
+  ],
+  { age: 1, active: false },
+  { age: lt(40) }
+)
+```
+
 ## Install / Use
 
 ```
