@@ -77,15 +77,11 @@ const siftArrayAgainstPatterns = ([arr, ...patterns]) => {
   const noMatch = []
   arr.forEach(
     against(
-      ...patterns.map((pattern, idx) => when(pattern)(assignTo(results[idx]))),
-      otherwise(assignTo(noMatch))
+      ...patterns.map((pattern, idx) => when(pattern)(pushTo(results[idx]))),
+      otherwise(pushTo(noMatch))
     )
   )
   return [...results, noMatch]
-
-  function assignTo(arr) {
-    return item => arr.push(item)
-  }
 }
 
 //
@@ -124,13 +120,21 @@ const siftPojoAgainstPatterns = ([pojo, arr]) => {
   const noMatch = {}
   Object.entries(pojo).forEach(
     against(
-      ...arr.map((T, idx) => when([isString, T])(assignTo(results[idx]))),
-      otherwise(assignTo(noMatch))
+      ...arr.map((T, idx) => when([isString, T])(assignEntryTo(results[idx]))),
+      otherwise(assignEntryTo(noMatch))
     )
   )
   return [...results, noMatch]
+}
 
-  function assignTo(obj) {
-    return ([K, V]) => Object.assign(obj, { [K]: V })
-  }
+//
+// Helpers
+//
+
+function pushTo(arr) {
+  return item => arr.push(item)
+}
+
+function assignEntryTo(obj) {
+  return ([K, V]) => Object.assign(obj, { [K]: V })
 }
