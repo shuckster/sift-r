@@ -6,6 +6,11 @@
       alt="MIT license"
       src="https://img.shields.io/npm/l/sift-r?style=plastic"
     /></a>
+  <a href="https://www.npmjs.com/package/sift-r">
+    <img
+      alt="Downloads per week"
+      src="https://img.shields.io/npm/dw/sift-r?style=plastic"
+    /></a>
   <a href="https://bundlephobia.com/result?p=sift-r">
     <img
       alt="npm bundle size"
