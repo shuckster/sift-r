@@ -9,7 +9,7 @@ const isMap = x => x instanceof Map
 
 // TODO: can bring in from `match-iz` in the future
 const isIterable = x =>
-  x != null && [x[Symbol.iterator], x.next].every(x => typeof x === 'function')
+  x != null && [x[Symbol.iterator], x.next].every(isFunction)
 
 const isArrayOfBinaryArrays = allOf(
   isArray,
