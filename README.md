@@ -23,12 +23,13 @@
     /></a>
 </p>
 
-A complement to [match-iz](https://github.com/shuckster/match-iz) for filtering objects and arrays based on a `match-iz` pattern.
+A complement to [match-iz](https://github.com/shuckster/match-iz) for filtering objects, arrays, and `Map`/`Set` based on a `match-iz` pattern.
 
 - 🗺 [byPattern() for map/filter](#bypattern)
 - 📥 [sift() an object](#sift-an-object)
 - 📁 [sift() an array](#sift-an-array)
 - 🗂 [sift() an array into multiple buckets](#sift-an-array-into-multiple-buckets)
+- 🗺 [sift() a Map or Set](#sift-a-map-or-set)
 - 📖 [Documentation](https://github.com/shuckster/sift-r/wiki)
 - 📀 [Install / Use](#install--use)
 
@@ -159,6 +160,38 @@ const [oneYearOlds, lessThan40, theRest] = sift(
 
 // theRest ===
 //   [{ user: 'fred', age: 40, active: true }]
+```
+
+### `sift()` a `Map` or `Set`
+
+```js
+import { sift } from 'sift-r'
+import { lt } from 'match-iz'
+
+const [oneYearOlds, lessThan40, theRest] = sift(
+  new Set([
+    { user: 'barney', age: 36, active: false },
+    { user: 'fred', age: 40, active: true },
+    { user: 'pebbles', age: 1, active: false }
+  ]),
+  { age: 1, active: false },
+  { age: lt(40) }
+)
+
+// oneYearOlds ===
+//   new Set([
+//     { user: 'pebbles', age: 1, active: false }
+//   ])
+
+// lessThan40 ===
+//   new Set([
+//     { user: 'barney', age: 36, active: false }
+//   ])
+
+// theRest ===
+//   new Set([
+//     { user: 'fred', age: 40, active: true }
+//   ])
 ```
 
 ## Install / Use
