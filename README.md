@@ -164,6 +164,8 @@ const [oneYearOlds, lessThan40, theRest] = sift(
 
 ### `sift()` a `Map` or `Set`
 
+`Set` example:
+
 ```js
 import { sift } from 'sift-r'
 import { lt } from 'match-iz'
@@ -191,6 +193,38 @@ const [oneYearOlds, lessThan40, theRest] = sift(
 // theRest ===
 //   new Set([
 //     { user: 'fred', age: 40, active: true }
+//   ])
+```
+
+`Map` example:
+
+```js
+import { sift } from 'sift-r'
+import { lt } from 'match-iz'
+
+const [oneYearOlds, lessThan40, theRest] = sift(
+  new Map([
+    [0, { user: 'barney', age: 36, active: false }],
+    [1, { user: 'fred', age: 40, active: true }],
+    [2, { user: 'pebbles', age: 1, active: false }]
+  ]),
+  { age: 1, active: false },
+  { age: lt(40) }
+)
+
+// oneYearOlds ===
+//   new Map([
+//     [2, { user: 'pebbles', age: 1, active: false }]
+//   ])
+
+// lessThan40 ===
+//   new Map([
+//     [0, { user: 'barney', age: 36, active: false }]
+//   ])
+
+// theRest ===
+//   new Map([
+//     [1, { user: 'fred', age: 40, active: true }]
 //   ])
 ```
 
