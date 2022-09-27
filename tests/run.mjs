@@ -597,6 +597,36 @@ const testCases = [
     }
   ],
   //
+  // Iterable
+  //
+  [
+    'siftIterableAgainstPatterns',
+    {
+      cases: [
+        {
+          input: [flintstones(), { age: 1, active: false }, { age: lt(40) }],
+          expecting: [
+            [{ user: 'pebbles', age: 1, active: false }],
+            [{ user: 'barney', age: 36, active: false }],
+            [{ user: 'fred', age: 40, active: true }]
+          ]
+        },
+        {
+          input: [
+            flintstones(),
+            { active: false, age: pluck(isNumber) },
+            { active: true, age: pluck(isNumber) }
+          ],
+          expecting: [[36, 1], [40], []]
+        }
+      ],
+      run: (assertCase, input) => {
+        assertCase(sift(...input))
+      }
+    }
+  ],
+
+  //
   // Passthru
   //
   [
@@ -711,6 +741,12 @@ const testCases = [
     }
   ]
 ]
+
+function* flintstones() {
+  yield { user: 'barney', age: 36, active: false }
+  yield { user: 'fred', age: 40, active: true }
+  yield { user: 'pebbles', age: 1, active: false }
+}
 
 function makeTester(expecting, message) {
   return saw => {
