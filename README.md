@@ -41,7 +41,11 @@ const filtered = [
   { user: 'barney', age: 36, active: false },
   { user: 'fred', age: 40, active: true },
   { user: 'pebbles', age: 1, active: false }
-].filter(byPattern({ age: 36 }))
+].filter(
+  byPattern({
+    age: 36
+  })
+)
 
 // filtered ===
 //   [
@@ -55,7 +59,11 @@ const mapped = [
   { user: 'fred', age: 40, active: true },
   { user: 'pebbles', age: 1, active: false },
   { user: '', age: 'not-a-number', active: true }
-].map(byPattern({ age: pluck(isNumber) }))
+].map(
+  byPattern({
+    age: pluck(isNumber)
+  })
+)
 
 // mapped === [36, 40, 1, undefined]
 ```
@@ -142,6 +150,15 @@ const [oneYearOlds, lessThan40, theRest] = sift(
   { age: 1, active: false },
   { age: lt(40) }
 )
+
+// oneYearOlds ===
+//   [{ user: 'pebbles', age: 1, active: false }]
+
+// lessThan40 ===
+//   [{ user: 'barney', age: 36, active: false }]
+
+// theRest ===
+//   [{ user: 'fred', age: 40, active: true }]
 ```
 
 ## Install / Use
