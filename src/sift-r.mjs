@@ -7,6 +7,10 @@ const { isArray, isPojo, isFunction, isString } = lib
 const isSet = x => x instanceof Set
 const isMap = x => x instanceof Map
 
+// TODO: can bring in from `match-iz` in the future
+const isIterable = x =>
+  x != null && [x[Symbol.iterator], x.next].every(x => typeof x === 'function')
+
 const isArrayOfBinaryArrays = allOf(
   isArray,
   every(isArray),
@@ -38,6 +42,11 @@ export function sift(input, ...optionalSchema) {
     // Map
     when([isMap, allOf(not(isSet), not(isMap))])(siftMapAgainstPattern),
     when(allOf(firstOf(isMap), { length: gte(2) }))(siftMapAgainstPatterns),
+
+    // Other iterables
+    when(allOf(firstOf(isIterable), { length: gte(2) }))(
+      siftIterableAgainstPatterns
+    ),
 
     // Passthru
     when([isPojo])(([input]) => [{}, input]),
@@ -134,6 +143,22 @@ const siftMapAgainstPatterns = ([map, ...patterns]) => {
       otherwise(addToMap(noMatch, key))
     )
   )
+  return [...results, noMatch]
+}
+
+//
+// Iterables
+//
+
+const siftIterableAgainstPatterns = ([iter, ...patterns]) => {
+  const results = Array.from({ length: patterns.length }).map(() => [])
+  const noMatch = []
+  for (const value of iter) {
+    match(value)(
+      ...patterns.map((pattern, idx) => when(pattern)(pushTo(results[idx]))),
+      otherwise(pushTo(noMatch))
+    )
+  }
   return [...results, noMatch]
 }
 
