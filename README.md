@@ -30,6 +30,7 @@ A complement to [match-iz](https://github.com/shuckster/match-iz) for filtering 
 - 📁 [sift() an array](#sift-an-array)
 - 🗂 [sift() an array into multiple buckets](#sift-an-array-into-multiple-buckets)
 - 🗺 [sift() a Map or Set](#sift-a-map-or-set)
+- 🔢 [sift() an iterable](#sift-an-iterable)
 - 📖 [Documentation](https://github.com/shuckster/sift-r/wiki)
 - 📀 [Install / Use](#install--use)
 
@@ -226,6 +227,34 @@ const [oneYearOlds, lessThan40, theRest] = sift(
 //   new Map([
 //     [1, { user: 'fred', age: 40, active: true }]
 //   ])
+```
+
+### `sift()` an iterable
+
+```js
+import { sift } from 'sift-r'
+import { lt } from 'match-iz'
+
+function* flintstones() {
+  yield { user: 'barney', age: 36, active: false }
+  yield { user: 'fred', age: 40, active: true }
+  yield { user: 'pebbles', age: 1, active: false }
+}
+
+const [oneYearOlds, lessThan40, theRest] = sift(
+  flintstones(),
+  { age: 1, active: false },
+  { age: lt(40) }
+)
+
+// oneYearOlds ===
+//   [{ user: 'pebbles', age: 1, active: false }]
+
+// lessThan40 ===
+//   [{ user: 'barney', age: 36, active: false }]
+
+// theRest ===
+//   [{ user: 'fred', age: 40, active: true }]
 ```
 
 ## Install / Use
