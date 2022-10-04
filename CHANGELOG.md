@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [1.4.0] - 2022-10-04
+
+### Added
+
+- Support for sifting `Map`, `Set`, iterable
+
+### Updated
+
+- Small performance improvements
+
+### Updated
+
+- Slight performance tweak by removing a couple of closures
+
 ## [1.3.3] - 2022-09-20
 
 ### Updated
