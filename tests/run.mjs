@@ -282,18 +282,6 @@ const testCases = [
               }
             ]
           ]
-        },
-        {
-          input: [
-            [
-              { user: 'barney', age: 36, active: false },
-              { user: 'fred', age: 40, active: true },
-              { user: 'pebbles', age: 1, active: false }
-            ],
-            { active: false, age: pluck(isNumber) },
-            { active: true, age: pluck(isNumber) }
-          ],
-          expecting: [[36, 1], [40], []]
         }
       ],
       run: (assertCase, input) => {
@@ -320,6 +308,18 @@ const testCases = [
             [{ user: 'barney', age: 36, active: false }],
             [{ user: 'fred', age: 40, active: true }]
           ]
+        },
+        {
+          input: [
+            [
+              { user: 'barney', age: 36, active: false },
+              { user: 'fred', age: 40, active: true },
+              { user: 'pebbles', age: 1, active: false }
+            ],
+            { active: false, age: pluck(isNumber) },
+            { active: true, age: pluck(isNumber) }
+          ],
+          expecting: [[36, 1], [40], []]
         }
       ],
       run: (assertCase, input) => {
@@ -327,6 +327,305 @@ const testCases = [
       }
     }
   ],
+  //
+  // Set
+  //
+  [
+    'siftSetAgainstPattern',
+    {
+      cases: [
+        {
+          input: [new Set(['header', 1, '# header']), isString],
+          expecting: [new Set(['header', '# header']), new Set([1])]
+        },
+        {
+          input: [
+            new Set([
+              { user: 'barney', age: 36, active: false },
+              { user: 'fred', age: 40, active: true },
+              { user: 'pebbles', age: 1, active: false }
+            ]),
+            { age: 1, active: false }
+          ],
+          expecting: [
+            new Set([{ user: 'pebbles', age: 1, active: false }]),
+            new Set([
+              { user: 'barney', age: 36, active: false },
+              { user: 'fred', age: 40, active: true }
+            ])
+          ]
+        },
+        {
+          input: [
+            new Set([
+              { user: 'barney', age: 36, active: false },
+              { user: 'fred', age: 40, active: true },
+              { user: 'pebbles', age: 1, active: false }
+            ]),
+            { active: false }
+          ],
+          expecting: [
+            new Set([
+              { user: 'barney', age: 36, active: false },
+              { user: 'pebbles', age: 1, active: false }
+            ]),
+            new Set([{ user: 'fred', age: 40, active: true }])
+          ]
+        },
+        {
+          input: [
+            new Set([
+              { user: 'barney', age: 36, active: false },
+              { user: 'fred', age: 40, active: true },
+              { user: 'pebbles', age: 1, active: false }
+            ]),
+            o => o.active
+          ],
+          expecting: [
+            new Set([{ user: 'fred', age: 40, active: true }]),
+            new Set([
+              { user: 'barney', age: 36, active: false },
+              { user: 'pebbles', age: 1, active: false }
+            ])
+          ]
+        },
+        {
+          input: [
+            new Set([
+              { user: 'barney', age: 36, active: false },
+              { user: 'fred', age: 40, active: true },
+              { user: 'pebbles', age: 1, active: false }
+            ]),
+            { active: false, age: pluck(isNumber) }
+          ],
+          expecting: [
+            new Set([36, 1]),
+            new Set([
+              {
+                user: 'fred',
+                age: 40,
+                active: true
+              }
+            ])
+          ]
+        }
+      ],
+      run: (assertCase, input) => {
+        assertCase(sift(...input))
+      }
+    }
+  ],
+  [
+    'siftSetAgainstPatterns',
+    {
+      cases: [
+        {
+          input: [
+            new Set([
+              { user: 'barney', age: 36, active: false },
+              { user: 'fred', age: 40, active: true },
+              { user: 'pebbles', age: 1, active: false }
+            ]),
+            { age: 1, active: false },
+            { age: lt(40) }
+          ],
+          expecting: [
+            new Set([{ user: 'pebbles', age: 1, active: false }]),
+            new Set([{ user: 'barney', age: 36, active: false }]),
+            new Set([{ user: 'fred', age: 40, active: true }])
+          ]
+        },
+        {
+          input: [
+            new Set([
+              { user: 'barney', age: 36, active: false },
+              { user: 'fred', age: 40, active: true },
+              { user: 'pebbles', age: 1, active: false }
+            ]),
+            { active: false, age: pluck(isNumber) },
+            { active: true, age: pluck(isNumber) }
+          ],
+          expecting: [new Set([36, 1]), new Set([40]), new Set([])]
+        }
+      ],
+      run: (assertCase, input) => {
+        assertCase(sift(...input))
+      }
+    }
+  ],
+  //
+  // Map
+  //
+  [
+    'siftMapAgainstPattern',
+    {
+      cases: [
+        {
+          input: [
+            new Map([
+              [0, 'header'],
+              [1, 1],
+              [2, '# header']
+            ]),
+            isString
+          ],
+          expecting: [
+            new Map([
+              [0, 'header'],
+              [2, '# header']
+            ]),
+            new Map([[1, 1]])
+          ]
+        },
+        {
+          input: [
+            new Map([
+              [0, { user: 'barney', age: 36, active: false }],
+              [1, { user: 'fred', age: 40, active: true }],
+              [2, { user: 'pebbles', age: 1, active: false }]
+            ]),
+            { age: 1, active: false }
+          ],
+          expecting: [
+            new Map([[2, { user: 'pebbles', age: 1, active: false }]]),
+            new Map([
+              [0, { user: 'barney', age: 36, active: false }],
+              [1, { user: 'fred', age: 40, active: true }]
+            ])
+          ]
+        },
+        {
+          input: [
+            new Map([
+              [0, { user: 'barney', age: 36, active: false }],
+              [1, { user: 'fred', age: 40, active: true }],
+              [2, { user: 'pebbles', age: 1, active: false }]
+            ]),
+            { active: false }
+          ],
+          expecting: [
+            new Map([
+              [0, { user: 'barney', age: 36, active: false }],
+              [2, { user: 'pebbles', age: 1, active: false }]
+            ]),
+            new Map([[1, { user: 'fred', age: 40, active: true }]])
+          ]
+        },
+        {
+          input: [
+            new Map([
+              [0, { user: 'barney', age: 36, active: false }],
+              [1, { user: 'fred', age: 40, active: true }],
+              [2, { user: 'pebbles', age: 1, active: false }]
+            ]),
+            o => o.active
+          ],
+          expecting: [
+            new Map([[1, { user: 'fred', age: 40, active: true }]]),
+            new Map([
+              [0, { user: 'barney', age: 36, active: false }],
+              [2, { user: 'pebbles', age: 1, active: false }]
+            ])
+          ]
+        },
+        {
+          input: [
+            new Map([
+              [0, { user: 'barney', age: 36, active: false }],
+              [1, { user: 'fred', age: 40, active: true }],
+              [2, { user: 'pebbles', age: 1, active: false }]
+            ]),
+            { active: false, age: pluck(isNumber) }
+          ],
+          expecting: [
+            new Map([
+              [0, 36],
+              [2, 1]
+            ]),
+            new Map([[1, { user: 'fred', age: 40, active: true }]])
+          ]
+        }
+      ],
+      run: (assertCase, input) => {
+        assertCase(sift(...input))
+      }
+    }
+  ],
+  [
+    'siftMapAgainstPatterns',
+    {
+      cases: [
+        {
+          input: [
+            new Map([
+              [0, { user: 'barney', age: 36, active: false }],
+              [1, { user: 'fred', age: 40, active: true }],
+              [2, { user: 'pebbles', age: 1, active: false }]
+            ]),
+            { age: 1, active: false },
+            { age: lt(40) }
+          ],
+          expecting: [
+            new Map([[2, { user: 'pebbles', age: 1, active: false }]]),
+            new Map([[0, { user: 'barney', age: 36, active: false }]]),
+            new Map([[1, { user: 'fred', age: 40, active: true }]])
+          ]
+        },
+        {
+          input: [
+            new Map([
+              [0, { user: 'barney', age: 36, active: false }],
+              [1, { user: 'fred', age: 40, active: true }],
+              [2, { user: 'pebbles', age: 1, active: false }]
+            ]),
+            { active: false, age: pluck(isNumber) },
+            { active: true, age: pluck(isNumber) }
+          ],
+          expecting: [
+            new Map([
+              [0, 36],
+              [2, 1]
+            ]),
+            new Map([[1, 40]]),
+            new Map([])
+          ]
+        }
+      ],
+      run: (assertCase, input) => {
+        assertCase(sift(...input))
+      }
+    }
+  ],
+  //
+  // Iterable
+  //
+  [
+    'siftIterableAgainstPatterns',
+    {
+      cases: [
+        {
+          input: [flintstones(), { age: 1, active: false }, { age: lt(40) }],
+          expecting: [
+            [{ user: 'pebbles', age: 1, active: false }],
+            [{ user: 'barney', age: 36, active: false }],
+            [{ user: 'fred', age: 40, active: true }]
+          ]
+        },
+        {
+          input: [
+            flintstones(),
+            { active: false, age: pluck(isNumber) },
+            { active: true, age: pluck(isNumber) }
+          ],
+          expecting: [[36, 1], [40], []]
+        }
+      ],
+      run: (assertCase, input) => {
+        assertCase(sift(...input))
+      }
+    }
+  ],
+
   //
   // Passthru
   //
@@ -443,6 +742,12 @@ const testCases = [
   ]
 ]
 
+function* flintstones() {
+  yield { user: 'barney', age: 36, active: false }
+  yield { user: 'fred', age: 40, active: true }
+  yield { user: 'pebbles', age: 1, active: false }
+}
+
 function makeTester(expecting, message) {
   return saw => {
     try {
@@ -458,8 +763,12 @@ function makeTester(expecting, message) {
 }
 
 testCases.forEach(([description, testCase = {}]) => {
-  const { cases = [], run = () => {} } = testCase
-  cases.forEach(({ input, expecting }, index) => {
+  const { skip, cases = [], run = () => {} } = testCase
+  if (skip) return
+
+  cases.forEach(({ skip, input, expecting }, index) => {
+    if (skip) return
+
     const message = `\n\n^\n| Test case failed in [${index}]: ${description}\n`
     const test = makeTester(expecting, message)
     run(test, input)
