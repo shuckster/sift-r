@@ -4,6 +4,22 @@ const { match, against, when, otherwise } = lib
 const { not, allOf, firstOf, every, gte } = lib
 const { isArray, isPojo, isFunction, isString } = lib
 
+//
+// Helpers
+//
+
+const pushTo = arr => item => arr.push(item)
+const addToSet = set => item => set.add(item)
+const addToMap = (map, key) => value => map.set(key, value)
+const assignEntryTo =
+  obj =>
+  ([K, V]) =>
+    Object.assign(obj, { [K]: V })
+
+//
+// Matchers
+//
+
 const isSet = x => x instanceof Set
 const isMap = x => x instanceof Map
 
@@ -21,47 +37,12 @@ const isPojoOfBinaryArrays = allOf(isPojo, val =>
   isArrayOfBinaryArrays(Object.values(val))
 )
 
-export function sift(input, ...optionalSchema) {
-  return match([input, ...optionalSchema])(
-    // Pojo
-    when([isPojoOfBinaryArrays])(siftPojoOfBinaryArrays),
-    when([isPojo, isPojo])(siftPojoAgainstSchema),
-    when([isPojo, isFunction])(siftPojoAgainstPredicate),
-    when([isPojo, isArray])(siftPojoAgainstPatterns),
-
-    // Array
-    when([isArrayOfBinaryArrays])(siftArrayOfBinaryArrays),
-    when([isArray, isArray])(siftArrayAgainstSchema),
-    when([isArray, not(isArray)])(siftArrayAgainstPattern),
-    when(allOf(firstOf(isArray), { length: gte(2) }))(siftArrayAgainstPatterns),
-
-    // Set
-    when([isSet, allOf(not(isSet), not(isMap))])(siftSetAgainstPattern),
-    when(allOf(firstOf(isSet), { length: gte(2) }))(siftSetAgainstPatterns),
-
-    // Map
-    when([isMap, allOf(not(isSet), not(isMap))])(siftMapAgainstPattern),
-    when(allOf(firstOf(isMap), { length: gte(2) }))(siftMapAgainstPatterns),
-
-    // Other iterables
-    when(allOf(firstOf(isIterable), { length: gte(2) }))(
-      siftIterableAgainstPatterns
-    ),
-
-    // Passthru
-    when([isPojo])(([input]) => [{}, input]),
-    when([isArray])(([input]) => [[], input]),
-    when([isSet])(([input]) => [new Set([]), input]),
-    when([isMap])(([input]) => [new Map([]), input]),
-    otherwise(([input]) => [undefined, input])
-  )
-}
-
-export const byPattern = pattern =>
-  against(
-    when(pattern, x => x),
-    otherwise(undefined)
-  )
+const isLenGte2 = { length: gte(2) }
+const isArrayMatcher = allOf(firstOf(isArray, not(isArray)), isLenGte2)
+const isNotSetOrMap = allOf(not(isSet), not(isMap))
+const isSetMatcher = allOf(firstOf(isSet, isNotSetOrMap), isLenGte2)
+const isMapMatcher = allOf(firstOf(isMap, isNotSetOrMap), isLenGte2)
+const isIterableMatcher = allOf(firstOf(isIterable), isLenGte2)
 
 //
 // Arrays
@@ -88,12 +69,6 @@ const siftArrayOfBinaryArrays = ([arrayOfBinaryArrays]) =>
     )
   )
 
-const siftArrayAgainstPattern = ([arr, pattern]) =>
-  siftArrayAgainstSchema([
-    arr,
-    Array.from({ length: arr.length }).fill(pattern)
-  ])
-
 const siftArrayAgainstPatterns = ([arr, ...patterns]) => {
   const results = Array.from({ length: patterns.length }).map(() => [])
   const noMatch = []
@@ -110,9 +85,6 @@ const siftArrayAgainstPatterns = ([arr, ...patterns]) => {
 // Set
 //
 
-const siftSetAgainstPattern = ([set, pattern]) =>
-  siftSetAgainstPatterns([set, pattern])
-
 const siftSetAgainstPatterns = ([set, ...patterns]) => {
   const results = Array.from({ length: patterns.length }).map(() => new Set())
   const noMatch = new Set()
@@ -128,9 +100,6 @@ const siftSetAgainstPatterns = ([set, ...patterns]) => {
 //
 // Map
 //
-
-const siftMapAgainstPattern = ([map, pattern]) =>
-  siftMapAgainstPatterns([map, pattern])
 
 const siftMapAgainstPatterns = ([map, ...patterns]) => {
   const results = Array.from({ length: patterns.length }).map(() => new Map())
@@ -206,21 +175,48 @@ const siftPojoAgainstPatterns = ([pojo, arr]) => {
 }
 
 //
-// Helpers
+// Overloads
 //
 
-function pushTo(arr) {
-  return item => arr.push(item)
+const siftOverloads = against(
+  // Pojo
+  when([isPojoOfBinaryArrays])(siftPojoOfBinaryArrays),
+  when([isPojo, isPojo])(siftPojoAgainstSchema),
+  when([isPojo, isFunction])(siftPojoAgainstPredicate),
+  when([isPojo, isArray])(siftPojoAgainstPatterns),
+
+  // Array
+  when([isArrayOfBinaryArrays])(siftArrayOfBinaryArrays),
+  when([isArray, isArray])(siftArrayAgainstSchema),
+  when(isArrayMatcher)(siftArrayAgainstPatterns),
+
+  // Set
+  when(isSetMatcher)(siftSetAgainstPatterns),
+
+  // Map
+  when(isMapMatcher)(siftMapAgainstPatterns),
+
+  // Other iterables
+  when(isIterableMatcher)(siftIterableAgainstPatterns),
+
+  // Passthru
+  when([isPojo])(([input]) => [{}, input]),
+  when([isArray])(([input]) => [[], input]),
+  when([isSet])(([input]) => [new Set([]), input]),
+  when([isMap])(([input]) => [new Map([]), input]),
+  otherwise(([input]) => [undefined, input])
+)
+
+//
+// Exports
+//
+
+export function sift(input, ...optionalSchema) {
+  return siftOverloads([input, ...optionalSchema])
 }
 
-function addToSet(set) {
-  return item => set.add(item)
-}
-
-function addToMap(map, key) {
-  return value => map.set(key, value)
-}
-
-function assignEntryTo(obj) {
-  return ([K, V]) => Object.assign(obj, { [K]: V })
-}
+export const byPattern = pattern =>
+  against(
+    when(pattern, x => x),
+    otherwise(undefined)
+  )
